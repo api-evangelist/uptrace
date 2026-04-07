@@ -5,8 +5,8 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Observability
   - APM
+  - Observability
 url: >-
   https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/apis.yml
 created: '2026-03-25'
@@ -19,8 +19,8 @@ apis:
       Uptrace is an open source APM and distributed tracing tool powered by OpenTelemetry for monitoring applications and infrastructure.
     humanURL: https://uptrace.dev
     tags:
-      - Observability
       - APM
+      - Observability
     properties:
       - type: Documentation
         url: https://uptrace.dev/get/get-started.html
