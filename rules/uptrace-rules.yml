@@ -1,0 +1,75 @@
+extends: spectral:oas
+rules:
+  uptrace-operation-ids-camel-case:
+    description: Operation IDs must use camelCase
+    message: "Operation ID '{{value}}' must be camelCase"
+    severity: warn
+    given: "$.paths[*][*].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+
+  uptrace-path-kebab-case:
+    description: Path segments must use kebab-case
+    message: "Path '{{path}}' must use kebab-case segments"
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(/[a-z0-9{}-]+)+$"
+
+  uptrace-summaries-title-case:
+    description: Operation summaries must use Title Case
+    message: "Summary '{{value}}' must use Title Case"
+    severity: warn
+    given: "$.paths[*][*].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^([A-Z][a-z0-9]* ?)+$"
+
+  uptrace-bearer-auth:
+    description: All non-ingestion operations should use BearerAuth or DSNAuth
+    message: "Operation should use BearerAuth or DSNAuth security"
+    severity: info
+    given: "$.paths[?(!@property.match(/prometheus\\/write/))][get,post,put,delete]"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+
+  uptrace-delete-returns-204:
+    description: DELETE operations must return 204
+    message: "DELETE should return 204 No Content"
+    severity: warn
+    given: "$.paths[*].delete.responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: ['204']
+
+  uptrace-project-id-required:
+    description: List and create operations should require projectId
+    message: "Collection endpoint should require projectId parameter"
+    severity: info
+    given: "$.paths[*].get"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+
+  uptrace-api-prefix:
+    description: API paths should use /api/ prefix
+    message: "Uptrace API paths should start with /api/"
+    severity: info
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^/api/.*"

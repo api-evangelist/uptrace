@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://api.uptrace.dev/api/v1/annotations",
+    "headers": {
+      "Authorization": "Bearer p_secret_token_abc123",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "projectId": 1,
+      "name": "v2.5.0 Deployment",
+      "description": "Deployed [v2.5.0](https://github.com/myapp/releases/tag/v2.5.0) to production",
+      "tags": ["deployment", "production"],
+      "attrs": {
+        "version": "2.5.0",
+        "service": "api-server",
+        "deployer": "ci-cd-pipeline"
+      },
+      "time": "2026-05-03T14:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 42,
+      "projectId": 1,
+      "name": "v2.5.0 Deployment",
+      "description": "Deployed [v2.5.0](https://github.com/myapp/releases/tag/v2.5.0) to production",
+      "tags": ["deployment", "production"],
+      "attrs": {
+        "version": "2.5.0",
+        "service": "api-server",
+        "deployer": "ci-cd-pipeline"
+      },
+      "time": "2026-05-03T14:00:00Z",
+      "createdAt": "2026-05-03T14:00:05Z",
+      "updatedAt": "2026-05-03T14:00:05Z"
+    }
+  }
+}

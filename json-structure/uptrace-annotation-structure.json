@@ -1,0 +1,16 @@
+{
+  "title": "Uptrace Annotation Structure",
+  "description": "Field-level documentation for the Uptrace Annotation resource",
+  "type": "object",
+  "fields": [
+    { "name": "id", "type": "integer", "required": true, "description": "Unique annotation identifier" },
+    { "name": "projectId", "type": "integer", "required": true, "description": "Parent project identifier" },
+    { "name": "name", "type": "string", "required": true, "description": "Annotation label on charts" },
+    { "name": "description", "type": "string", "required": false, "description": "Markdown-formatted description" },
+    { "name": "tags", "type": "array<string>", "required": false, "description": "Classification tags" },
+    { "name": "attrs", "type": "object (string key-value)", "required": false, "description": "Custom attributes (version, service, etc.)" },
+    { "name": "time", "type": "string (date-time)", "required": false, "description": "Time of the annotated event" },
+    { "name": "createdAt", "type": "string (date-time)", "required": false, "description": "Creation timestamp" },
+    { "name": "updatedAt", "type": "string (date-time)", "required": false, "description": "Last update timestamp" }
+  ]
+}

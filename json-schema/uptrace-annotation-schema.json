@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/uptrace/main/json-schema/uptrace-annotation-schema.json",
+  "title": "Uptrace Annotation",
+  "description": "A chart annotation marking a deployment, incident, or other significant event in Uptrace",
+  "type": "object",
+  "required": ["id", "projectId", "name"],
+  "properties": {
+    "id": { "type": "integer", "description": "Unique annotation identifier" },
+    "projectId": { "type": "integer", "description": "Associated project identifier" },
+    "name": { "type": "string", "description": "Annotation label displayed on charts" },
+    "description": { "type": "string", "description": "Markdown-formatted description" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Classification tags (e.g., deployment, incident)"
+    },
+    "attrs": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Custom key-value attributes (e.g., version, service)"
+    },
+    "time": { "type": "string", "format": "date-time", "description": "Time of the annotated event" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  }
+}

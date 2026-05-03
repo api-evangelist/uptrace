@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/uptrace/main/json-schema/uptrace-alert-schema.json",
+  "title": "Uptrace Alert",
+  "description": "An alert rule in the Uptrace APM platform",
+  "type": "object",
+  "required": ["id", "projectId", "name", "query"],
+  "properties": {
+    "id": { "type": "integer" },
+    "projectId": { "type": "integer" },
+    "name": { "type": "string", "description": "Alert rule name" },
+    "type": {
+      "type": "string",
+      "enum": ["metric", "error-rate", "span-count"],
+      "description": "Alert type"
+    },
+    "state": {
+      "type": "string",
+      "enum": ["active", "resolved", "muted"],
+      "description": "Current alert state"
+    },
+    "query": { "type": "string", "description": "PromQL or Uptrace query expression" },
+    "forDuration": { "type": "string", "description": "Duration the condition must hold (e.g., 5m)" },
+    "condition": { "type": "string", "description": "Comparison condition (e.g., > 0)" },
+    "notificationChannels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["email", "slack", "webhook", "alertmanager"]
+      }
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  }
+}

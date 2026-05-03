@@ -1,0 +1,155 @@
+title: Uptrace Vocabulary
+description: >-
+  Domain vocabulary for the Uptrace open source APM and observability platform,
+  covering OpenTelemetry, distributed tracing, metrics, logs, and monitoring concepts.
+version: '1.0'
+created: '2026-05-03'
+modified: '2026-05-03'
+tags:
+  - APM
+  - Observability
+  - OpenTelemetry
+  - Monitoring
+  - Tracing
+
+terms:
+  - term: APM
+    definition: >-
+      Application Performance Monitoring. The practice of monitoring software
+      applications to detect and diagnose performance issues. Uptrace provides
+      APM capabilities through distributed tracing, metrics, and log aggregation.
+    synonyms:
+      - Application Performance Monitoring
+    related:
+      - Distributed Tracing
+      - Metrics
+      - Logs
+
+  - term: OpenTelemetry
+    definition: >-
+      A CNCF observability framework providing vendor-neutral APIs, SDKs,
+      and instrumentation for collecting traces, metrics, and logs from
+      applications. Uptrace is built natively on OpenTelemetry.
+    synonyms:
+      - OTel
+    related:
+      - OTLP
+      - Span
+      - Trace
+
+  - term: OTLP
+    definition: >-
+      OpenTelemetry Protocol. The standard data format and transmission
+      protocol for telemetry data. Uptrace accepts OTLP via gRPC (port 14317)
+      and HTTP (port 14318).
+    synonyms:
+      - OpenTelemetry Protocol
+    related:
+      - OpenTelemetry
+      - DSN
+
+  - term: DSN
+    definition: >-
+      Data Source Name. A connection string used to configure OpenTelemetry
+      SDKs and exporters to send telemetry data to Uptrace. Format:
+      http://secret_token@host:http_port?grpc=grpc_port
+    synonyms:
+      - Data Source Name
+    related:
+      - OTLP
+      - Project
+
+  - term: Span
+    definition: >-
+      A single unit of work in a distributed trace, representing an operation
+      (e.g., HTTP request, database query) with a start time, duration, and
+      attributes. Spans form a hierarchy constituting a trace.
+    related:
+      - Trace
+      - OpenTelemetry
+
+  - term: Trace
+    definition: >-
+      A collection of spans representing the complete lifecycle of a request
+      as it flows through distributed services. Each trace has a unique
+      trace ID shared by all its constituent spans.
+    related:
+      - Span
+      - Distributed Tracing
+
+  - term: Distributed Tracing
+    definition: >-
+      A method for tracking requests as they flow through distributed systems,
+      correlating spans across multiple services using trace context propagation.
+    related:
+      - Trace
+      - Span
+
+  - term: Annotation
+    definition: >-
+      A marker added to Uptrace charts at a specific timestamp to document
+      a deployment, incident, configuration change, or other significant event.
+      Annotations include a name, optional description, tags, and custom attributes.
+    related:
+      - Dashboard
+      - Deployment
+
+  - term: PromQL
+    definition: >-
+      Prometheus Query Language. A functional query language for selecting and
+      aggregating time series data. Uptrace supports PromQL for querying
+      metrics and configuring alert rules.
+    related:
+      - Prometheus Remote Write
+      - Alert
+
+  - term: Prometheus Remote Write
+    definition: >-
+      A Prometheus protocol for sending metrics from a Prometheus instance
+      to a remote storage backend. Uptrace supports ingesting Prometheus
+      metrics via POST to /api/v1/prometheus/write.
+    related:
+      - PromQL
+      - Metrics
+
+  - term: Alert Rule
+    definition: >-
+      A monitoring rule that evaluates a PromQL expression on a recurring
+      basis and triggers notifications when a condition is met (e.g.,
+      error rate > 5% for 5 minutes).
+    related:
+      - PromQL
+      - Notification Channel
+
+  - term: Notification Channel
+    definition: >-
+      A destination for alert notifications in Uptrace, including email,
+      Slack, webhook, and AlertManager integrations.
+    related:
+      - Alert Rule
+
+  - term: Service Graph
+    definition: >-
+      A visual representation of service interactions, dependencies, and
+      performance metrics derived from distributed trace data.
+    related:
+      - Trace
+      - Distributed Tracing
+
+  - term: RED Metrics
+    definition: >-
+      Rate, Errors, and Duration — the three fundamental metrics for
+      measuring service health. Uptrace automatically computes RED metrics
+      from trace span data.
+    related:
+      - Metrics
+      - Span
+
+  - term: Project
+    definition: >-
+      The top-level organizational unit in Uptrace that groups telemetry
+      data (traces, metrics, logs) from one or more services. Each project
+      has a unique DSN for data ingestion.
+    related:
+      - DSN
+      - Dashboard

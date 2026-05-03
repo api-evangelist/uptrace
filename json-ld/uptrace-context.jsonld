@@ -1,0 +1,39 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "uptrace": "https://api.uptrace.dev/api/v1/",
+    "otel": "https://opentelemetry.io/docs/concepts/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Project": "schema:SoftwareApplication",
+    "id": { "@id": "schema:identifier", "@type": "xsd:integer" },
+    "name": { "@id": "schema:name", "@type": "xsd:string" },
+    "slug": { "@id": "schema:alternateName", "@type": "xsd:string" },
+    "dsn": { "@id": "uptrace:dsn", "@type": "xsd:string" },
+
+    "Annotation": "schema:Action",
+    "projectId": { "@id": "uptrace:projectId", "@type": "xsd:integer" },
+    "tags": { "@id": "schema:keywords", "@container": "@set" },
+    "attrs": { "@id": "uptrace:attrs", "@type": "@json" },
+    "time": { "@id": "schema:startTime", "@type": "xsd:dateTime" },
+
+    "Alert": "schema:Alert",
+    "query": { "@id": "uptrace:query", "@type": "xsd:string" },
+    "state": { "@id": "uptrace:state", "@type": "xsd:string" },
+    "forDuration": { "@id": "uptrace:forDuration", "@type": "xsd:string" },
+    "condition": { "@id": "uptrace:condition", "@type": "xsd:string" },
+    "notificationChannels": { "@id": "uptrace:notificationChannels", "@container": "@set" },
+
+    "Dashboard": "schema:WebPage",
+
+    "Span": "schema:Action",
+    "traceId": { "@id": "otel:trace-id", "@type": "xsd:string" },
+    "spanId": { "@id": "otel:span-id", "@type": "xsd:string" },
+    "serviceName": { "@id": "schema:serviceType", "@type": "xsd:string" },
+
+    "description": { "@id": "schema:description", "@type": "xsd:string" },
+    "createdAt": { "@id": "schema:dateCreated", "@type": "xsd:dateTime" },
+    "updatedAt": { "@id": "schema:dateModified", "@type": "xsd:dateTime" }
+  }
+}

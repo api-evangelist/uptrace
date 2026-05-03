@@ -1,0 +1,312 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Uptrace Observability and Monitoring"
+  description: >-
+    Workflow capability for Uptrace APM observability and monitoring workflows,
+    combining annotations for deployment tracking, alert rule management,
+    dashboard operations, and project management. Designed for platform
+    engineering teams, SREs, and DevOps practitioners managing application
+    observability with OpenTelemetry.
+  tags:
+    - Uptrace
+    - APM
+    - Observability
+    - OpenTelemetry
+    - SRE
+    - DevOps
+    - Monitoring
+    - Alerting
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      UPTRACE_API_TOKEN: UPTRACE_API_TOKEN
+
+capability:
+  consumes:
+    - import: uptrace
+      location: ./shared/uptrace.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: uptrace-observability-api
+      description: "Unified REST API for Uptrace observability and monitoring workflows."
+      resources:
+        - path: /v1/projects
+          name: projects
+          description: "Project management"
+          operations:
+            - method: GET
+              name: list-projects
+              description: "List all Uptrace projects"
+              call: "uptrace.list-projects"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-project
+              description: "Create a new Uptrace project"
+              call: "uptrace.create-project"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/projects/{projectId}
+          name: project
+          description: "Individual project"
+          operations:
+            - method: GET
+              name: get-project
+              description: "Get project details and DSN"
+              call: "uptrace.get-project"
+              with:
+                projectId: "rest.projectId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/annotations
+          name: annotations
+          description: "Chart annotations for deployment and event tracking"
+          operations:
+            - method: GET
+              name: list-annotations
+              description: "List annotations for a project"
+              call: "uptrace.list-annotations"
+              with:
+                projectId: "rest.projectId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-annotation
+              description: "Create a deployment or event annotation"
+              call: "uptrace.create-annotation"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/annotations/{annotationId}
+          name: annotation
+          description: "Individual annotation"
+          operations:
+            - method: GET
+              name: get-annotation
+              description: "Get annotation details"
+              call: "uptrace.get-annotation"
+              with:
+                annotationId: "rest.annotationId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: DELETE
+              name: delete-annotation
+              description: "Delete an annotation"
+              call: "uptrace.delete-annotation"
+              with:
+                annotationId: "rest.annotationId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/alerts
+          name: alerts
+          description: "Alert rule management"
+          operations:
+            - method: GET
+              name: list-alerts
+              description: "List alert rules for a project"
+              call: "uptrace.list-alerts"
+              with:
+                projectId: "rest.projectId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-alert
+              description: "Create a new alert rule"
+              call: "uptrace.create-alert"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/alerts/{alertId}
+          name: alert
+          description: "Individual alert rule"
+          operations:
+            - method: GET
+              name: get-alert
+              description: "Get alert rule details"
+              call: "uptrace.get-alert"
+              with:
+                alertId: "rest.alertId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: DELETE
+              name: delete-alert
+              description: "Delete an alert rule"
+              call: "uptrace.delete-alert"
+              with:
+                alertId: "rest.alertId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/dashboards
+          name: dashboards
+          description: "Dashboard management"
+          operations:
+            - method: GET
+              name: list-dashboards
+              description: "List dashboards for a project"
+              call: "uptrace.list-dashboards"
+              with:
+                projectId: "rest.projectId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-dashboard
+              description: "Create a new dashboard"
+              call: "uptrace.create-dashboard"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: uptrace-observability-mcp
+      transport: http
+      description: "MCP server for AI-assisted Uptrace observability and monitoring workflows."
+      tools:
+        - name: list-projects
+          description: "List all Uptrace observability projects"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "uptrace.list-projects"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-project
+          description: "Get details and DSN for a specific Uptrace project"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "uptrace.get-project"
+          with:
+            projectId: "tools.projectId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-project
+          description: "Create a new Uptrace observability project"
+          hints:
+            readOnly: false
+            openWorld: false
+          call: "uptrace.create-project"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-annotations
+          description: "List deployment and event annotations for a project"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "uptrace.list-annotations"
+          with:
+            projectId: "tools.projectId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-annotation
+          description: "Create a deployment annotation marking a release or incident on dashboards"
+          hints:
+            readOnly: false
+            openWorld: false
+          call: "uptrace.create-annotation"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-annotation
+          description: "Get details of a specific chart annotation"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "uptrace.get-annotation"
+          with:
+            annotationId: "tools.annotationId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: delete-annotation
+          description: "Delete a chart annotation"
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "uptrace.delete-annotation"
+          with:
+            annotationId: "tools.annotationId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-alerts
+          description: "List alert rules for a project"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "uptrace.list-alerts"
+          with:
+            projectId: "tools.projectId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-alert
+          description: "Create a new monitoring alert rule using PromQL"
+          hints:
+            readOnly: false
+            openWorld: false
+          call: "uptrace.create-alert"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-alert
+          description: "Get details of a specific alert rule"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "uptrace.get-alert"
+          with:
+            alertId: "tools.alertId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: delete-alert
+          description: "Delete an alert rule"
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "uptrace.delete-alert"
+          with:
+            alertId: "tools.alertId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-dashboards
+          description: "List dashboards for a project"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "uptrace.list-dashboards"
+          with:
+            projectId: "tools.projectId"
+          outputParameters:
+            - type: object
+              mapping: "$."

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://api.uptrace.dev/api/v1/alerts",
+    "headers": {
+      "Authorization": "Bearer p_secret_token_abc123",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "projectId": 1,
+      "name": "High Error Rate - API Server",
+      "type": "error-rate",
+      "query": "sum(rate(http_requests_total{status=~'5..'}[5m])) / sum(rate(http_requests_total[5m]))",
+      "forDuration": "5m",
+      "condition": "> 0.05",
+      "notificationChannels": ["slack", "email"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 15,
+      "projectId": 1,
+      "name": "High Error Rate - API Server",
+      "type": "error-rate",
+      "state": "active",
+      "query": "sum(rate(http_requests_total{status=~'5..'}[5m])) / sum(rate(http_requests_total[5m]))",
+      "forDuration": "5m",
+      "condition": "> 0.05",
+      "notificationChannels": ["slack", "email"],
+      "createdAt": "2026-05-03T10:00:00Z",
+      "updatedAt": "2026-05-03T10:00:00Z"
+    }
+  }
+}
