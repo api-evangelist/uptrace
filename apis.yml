@@ -37,7 +37,7 @@ apis:
     properties:
       - type: Documentation
         url: https://uptrace.dev/get/get-started.html
-      - type: GitHub Repository
+      - type: GitHubRepository
         url: https://github.com/uptrace/uptrace
       - type: OpenAPI
         url: https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/openapi/uptrace-openapi.yml
@@ -46,7 +46,7 @@ common:
     url: https://uptrace.dev
   - type: Documentation
     url: https://uptrace.dev/get/get-started.html
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/uptrace/uptrace
   - type: Docker Hub
     url: https://hub.docker.com/r/uptrace/uptrace
