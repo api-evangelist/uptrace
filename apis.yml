@@ -6,58 +6,60 @@ description: Uptrace is an open source APM and distributed tracing platform powe
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-- APM
-- Observability
-- OpenTelemetry
-- Distributed Tracing
-- Monitoring
+  - APM
+  - Observability
+  - OpenTelemetry
+  - Distributed Tracing
+  - Monitoring
 url: https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/apis.yml
 created: '2026-03-25'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 apis:
-- aid: uptrace:uptrace
-  name: Uptrace API
-  description: The Uptrace REST API provides programmatic management of projects, chart annotations for deployment tracking,
-    alert rules using PromQL, dashboard management, and Prometheus Remote Write for metrics ingestion. Uptrace accepts OpenTelemetry
-    data via OTLP/gRPC and OTLP/HTTP.
-  humanURL: https://uptrace.dev
-  baseURL: https://api.uptrace.dev
-  tags:
-  - APM
-  - Observability
-  - OpenTelemetry
-  - Distributed Tracing
-  - Alerting
-  properties:
+  - aid: uptrace:uptrace
+    name: Uptrace API
+    description: The Uptrace REST API provides programmatic management of projects, chart annotations for deployment tracking,
+      alert rules using PromQL, dashboard management, and Prometheus Remote Write for metrics ingestion. Uptrace accepts OpenTelemetry
+      data via OTLP/gRPC and OTLP/HTTP.
+    humanURL: https://uptrace.dev
+    baseURL: https://api.uptrace.dev
+    tags:
+    - APM
+    - Observability
+    - OpenTelemetry
+    - Distributed Tracing
+    - Alerting
+    properties:
+    - type: Documentation
+      url: https://uptrace.dev/get/get-started.html
+    - type: GitHubRepository
+      url: https://github.com/uptrace/uptrace
+    - type: OpenAPI
+      url: https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/openapi/uptrace-openapi.yml
+    - type: NaftikoCapability
+      url: capabilities/uptrace-alerts.yaml
+    - type: NaftikoCapability
+      url: capabilities/uptrace-annotations.yaml
+    - type: NaftikoCapability
+      url: capabilities/uptrace-dashboards.yaml
+    - type: NaftikoCapability
+      url: capabilities/uptrace-metrics.yaml
+    - type: NaftikoCapability
+      url: capabilities/uptrace-projects.yaml
+common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/uptracedev
+  - type: Website
+    url: https://uptrace.dev
   - type: Documentation
     url: https://uptrace.dev/get/get-started.html
-  - type: GitHubRepository
+  - type: GitHubOrganization
     url: https://github.com/uptrace/uptrace
-  - type: OpenAPI
-    url: https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/openapi/uptrace-openapi.yml
-  - type: NaftikoCapability
-    url: capabilities/uptrace-alerts.yaml
-  - type: NaftikoCapability
-    url: capabilities/uptrace-annotations.yaml
-  - type: NaftikoCapability
-    url: capabilities/uptrace-dashboards.yaml
-  - type: NaftikoCapability
-    url: capabilities/uptrace-metrics.yaml
-  - type: NaftikoCapability
-    url: capabilities/uptrace-projects.yaml
-common:
-- type: Website
-  url: https://uptrace.dev
-- type: Documentation
-  url: https://uptrace.dev/get/get-started.html
-- type: GitHubOrganization
-  url: https://github.com/uptrace/uptrace
-- type: Docker Hub
-  url: https://hub.docker.com/r/uptrace/uptrace
-- name: MCP Server
-  url: https://github.com/uptrace/mcp
-  type: MCPServer
+  - type: Docker Hub
+    url: https://hub.docker.com/r/uptrace/uptrace
+  - name: MCP Server
+    url: https://github.com/uptrace/mcp
+    type: MCPServer
 maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+  - FN: Kin Lane
+    email: kin@apievangelist.com
