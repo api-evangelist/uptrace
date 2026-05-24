@@ -60,6 +60,8 @@ common:
   - name: MCP Server
     url: https://github.com/uptrace/mcp
     type: MCPServer
+  - type: LLMsTxt
+    url: https://uptrace.dev/llms.txt
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
