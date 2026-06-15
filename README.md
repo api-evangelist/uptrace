@@ -1,81 +1,60 @@
-# Uptrace
+# Uptrace (uptrace)
 
 Uptrace is an open source APM and distributed tracing platform powered by OpenTelemetry for monitoring application traces, metrics, and logs. The Uptrace API provides programmatic access to annotations, Prometheus metrics ingestion, PromQL querying, alert rules, project management, and dashboards.
 
-**Website:** https://uptrace.dev
-**Documentation:** https://uptrace.dev/get/get-started.html
-**GitHub:** https://github.com/uptrace/uptrace
+**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/apis.yml)
+
+## Scope
+
+- **Type:** Index
+
+## Tags
+
+- APM
+- Observability
+- OpenTelemetry
+- Distributed Tracing
+- Monitoring
+
+## Timestamps
+
+- **Created:** 2026-03-25
+- **Modified:** 2026-05-19
 
 ## APIs
 
-| API | Description |
-|---|---|
-| [Uptrace API](openapi/uptrace-openapi.yml) | REST API for annotations, alerts, projects, dashboards, and Prometheus metrics ingestion |
+### Uptrace API
 
-## OpenAPI Specifications
+The Uptrace REST API provides programmatic management of projects, chart annotations for deployment tracking, alert rules using PromQL, dashboard management, and Prometheus Remote Write for metrics ingestion. Uptrace accepts OpenTelemetry data via OTLP/gRPC and OTLP/HTTP.
 
-| Spec | Description |
-|---|---|
-| [uptrace-openapi.yml](openapi/uptrace-openapi.yml) | Uptrace API covering annotations, Prometheus ingestion/querying, alerts, projects, and dashboards |
+- **Human URL:** [https://uptrace.dev](https://uptrace.dev)
+- **Base URL:** `https://api.uptrace.dev`
 
-## Spectral Rules
+#### Tags
 
-| Ruleset | Description |
-|---|---|
-| [uptrace-rules.yml](rules/uptrace-rules.yml) | Spectral ruleset enforcing Uptrace API conventions including /api/ prefix, bearer auth, and path naming |
+- APM
+- Observability
+- OpenTelemetry
+- Distributed Tracing
+- Alerting
 
-## Naftiko Capabilities
+#### Properties
 
-### Shared Definitions
+- [Documentation](https://uptrace.dev/get/get-started.html)
+- [GitHub Repository](https://github.com/uptrace/uptrace)
+- [OpenAPI](https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/openapi/uptrace-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+- [Postman Collection](collections/uptrace.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/uptrace.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
-| File | APIs Covered |
-|---|---|
-| [shared/uptrace.yaml](capabilities/shared/uptrace.yaml) | Uptrace API (annotations, alerts, projects, dashboards, Prometheus) |
+## Common Properties
 
-### Workflow Capabilities
-
-| Workflow | Description | Tools |
-|---|---|---|
-| [observability-and-monitoring.yaml](capabilities/observability-and-monitoring.yaml) | End-to-end observability — projects, annotations for deployments, alert rules, and dashboards | 13 tools |
-
-## JSON Schemas
-
-| Schema | Description |
-|---|---|
-| [uptrace-annotation-schema.json](json-schema/uptrace-annotation-schema.json) | Chart annotation resource |
-| [uptrace-alert-schema.json](json-schema/uptrace-alert-schema.json) | Alert rule resource |
-
-## JSON Structure
-
-| Structure | Description |
-|---|---|
-| [uptrace-annotation-structure.json](json-structure/uptrace-annotation-structure.json) | Field-level documentation for the Annotation resource |
-
-## JSON-LD
-
-| Context | Description |
-|---|---|
-| [uptrace-context.jsonld](json-ld/uptrace-context.jsonld) | Linked data context mapping Uptrace resources to schema.org and OpenTelemetry concepts |
-
-## Examples
-
-| Example | Description |
-|---|---|
-| [uptrace-create-annotation-example.json](examples/uptrace-create-annotation-example.json) | POST /api/v1/annotations deployment annotation request and response |
-| [uptrace-create-alert-example.json](examples/uptrace-create-alert-example.json) | POST /api/v1/alerts alert rule creation request and response |
-
-## Vocabulary
-
-| File | Description |
-|---|---|
-| [uptrace-vocabulary.yml](vocabulary/uptrace-vocabulary.yml) | Domain vocabulary for Uptrace APM including OpenTelemetry, tracing, PromQL, and observability concepts |
-
-## Links
-
-- **Website:** https://uptrace.dev
-- **Documentation:** https://uptrace.dev/get/get-started.html
-- **GitHub:** https://github.com/uptrace/uptrace
-- **Docker Hub:** https://hub.docker.com/r/uptrace/uptrace
+- [LinkedIn](https://www.linkedin.com/company/uptracedev)
+- [Website](https://uptrace.dev)
+- [Documentation](https://uptrace.dev/get/get-started.html)
+- [GitHub Organization](https://github.com/uptrace/uptrace)
+- [Docker  Hub](https://hub.docker.com/r/uptrace/uptrace)
+- [M C P Server](https://github.com/uptrace/mcp)
+- [L L Ms Txt](https://uptrace.dev/llms.txt)
 
 ## Maintainers
 

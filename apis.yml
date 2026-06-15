@@ -1,8 +1,9 @@
 aid: uptrace
 name: Uptrace
-description: Uptrace is an open source APM and distributed tracing platform powered by OpenTelemetry for monitoring application
-  traces, metrics, and logs. The Uptrace API provides programmatic access to annotations, Prometheus metrics ingestion, PromQL
-  querying, alert rules, project management, and dashboards.
+description: >-
+  Uptrace is an open source APM and distributed tracing platform powered by OpenTelemetry for monitoring application
+  traces, metrics, and logs. The Uptrace API provides programmatic access to annotations, Prometheus metrics ingestion,
+  PromQL querying, alert rules, project management, and dashboards.
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
@@ -18,34 +19,25 @@ specificationVersion: '0.19'
 apis:
   - aid: uptrace:uptrace
     name: Uptrace API
-    description: The Uptrace REST API provides programmatic management of projects, chart annotations for deployment tracking,
-      alert rules using PromQL, dashboard management, and Prometheus Remote Write for metrics ingestion. Uptrace accepts OpenTelemetry
-      data via OTLP/gRPC and OTLP/HTTP.
+    description: >-
+      The Uptrace REST API provides programmatic management of projects, chart annotations for deployment tracking,
+      alert rules using PromQL, dashboard management, and Prometheus Remote Write for metrics ingestion. Uptrace accepts
+      OpenTelemetry data via OTLP/gRPC and OTLP/HTTP.
     humanURL: https://uptrace.dev
     baseURL: https://api.uptrace.dev
     tags:
-    - APM
-    - Observability
-    - OpenTelemetry
-    - Distributed Tracing
-    - Alerting
+      - APM
+      - Observability
+      - OpenTelemetry
+      - Distributed Tracing
+      - Alerting
     properties:
-    - type: Documentation
-      url: https://uptrace.dev/get/get-started.html
-    - type: GitHubRepository
-      url: https://github.com/uptrace/uptrace
-    - type: OpenAPI
-      url: https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/openapi/uptrace-openapi.yml
-    - type: NaftikoCapability
-      url: capabilities/uptrace-alerts.yaml
-    - type: NaftikoCapability
-      url: capabilities/uptrace-annotations.yaml
-    - type: NaftikoCapability
-      url: capabilities/uptrace-dashboards.yaml
-    - type: NaftikoCapability
-      url: capabilities/uptrace-metrics.yaml
-    - type: NaftikoCapability
-      url: capabilities/uptrace-projects.yaml
+      - type: Documentation
+        url: https://uptrace.dev/get/get-started.html
+      - type: GitHubRepository
+        url: https://github.com/uptrace/uptrace
+      - type: OpenAPI
+        url: https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/openapi/uptrace-openapi.yml
 common:
   - type: LinkedIn
     url: https://www.linkedin.com/company/uptracedev
