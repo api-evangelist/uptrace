@@ -5,7 +5,7 @@ description: >-
   traces, metrics, and logs. The Uptrace API provides programmatic access to annotations, Prometheus metrics ingestion,
   PromQL querying, alert rules, project management, and dashboards.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - APM
   - Observability
