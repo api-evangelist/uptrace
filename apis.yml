@@ -39,6 +39,10 @@ apis:
       - type: OpenAPI
         url: https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/openapi/uptrace-openapi.yml
 common:
+  - type: DomainSecurity
+    url: security/uptrace-domain-security.yml
+  - type: Authentication
+    url: authentication/uptrace-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/uptracedev
   - type: Website

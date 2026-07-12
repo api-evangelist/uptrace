@@ -1,0 +1,23 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/uptrace-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: DSNAuth
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: 'DSN-based token: ''Bearer <project_secret_token>'''
+  sources:
+  - openapi/uptrace-openapi.yml
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  description: Uptrace API token
+  sources:
+  - openapi/uptrace-openapi.yml
