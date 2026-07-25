@@ -1,0 +1,264 @@
+openapi: 3.0.3
+info:
+  title: Uptrace Alerts Annotations API
+  description: Uptrace is an open source APM (Application Performance Monitoring) and distributed tracing platform powered by OpenTelemetry. The Uptrace REST API provides programmatic access to annotations, Prometheus metrics ingestion, alerting rules, and telemetry data including traces, metrics, and logs. Uptrace accepts telemetry data via OTLP/gRPC and OTLP/HTTP protocols in addition to Prometheus Remote Write.
+  version: v1
+  contact:
+    name: Uptrace Support
+    url: https://uptrace.dev
+  license:
+    name: BSL 1.1
+    url: https://github.com/uptrace/uptrace/blob/master/LICENSE
+servers:
+- url: https://api.uptrace.dev
+  description: Uptrace Cloud API
+- url: http://localhost:14318
+  description: Uptrace Self-Hosted (HTTP port)
+security:
+- BearerAuth: []
+tags:
+- name: Annotations
+  description: Chart annotation management
+paths:
+  /api/v1/annotations:
+    get:
+      operationId: listAnnotations
+      summary: List Annotations
+      description: Retrieve chart annotations for a project within a time range.
+      tags:
+      - Annotations
+      parameters:
+      - name: projectId
+        in: query
+        required: true
+        schema:
+          type: integer
+        description: Project identifier
+      - name: startTime
+        in: query
+        schema:
+          type: string
+          format: date-time
+        description: Start of time range (ISO 8601)
+      - name: endTime
+        in: query
+        schema:
+          type: string
+          format: date-time
+        description: End of time range (ISO 8601)
+      - name: tags
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: Filter by annotation tags
+      responses:
+        '200':
+          description: List of annotations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnotationList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createAnnotation
+      summary: Create Annotation
+      description: Create a chart annotation to mark a deployment, incident, or other significant event on Uptrace dashboards.
+      tags:
+      - Annotations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnotationRequest'
+      responses:
+        '200':
+          description: Annotation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/annotations/{annotationId}:
+    get:
+      operationId: getAnnotation
+      summary: Get Annotation
+      description: Retrieve a specific annotation by ID.
+      tags:
+      - Annotations
+      parameters:
+      - name: annotationId
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Annotation identifier
+      responses:
+        '200':
+          description: Annotation details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateAnnotation
+      summary: Update Annotation
+      description: Update an existing annotation.
+      tags:
+      - Annotations
+      parameters:
+      - name: annotationId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnotationRequest'
+      responses:
+        '200':
+          description: Annotation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteAnnotation
+      summary: Delete Annotation
+      description: Delete a chart annotation.
+      tags:
+      - Annotations
+      parameters:
+      - name: annotationId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Annotation deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Annotation:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+          description: Annotation label/title
+        description:
+          type: string
+          description: Markdown-formatted description
+        tags:
+          type: array
+          items:
+            type: string
+          description: Classification tags
+        attrs:
+          type: object
+          description: Custom key-value attributes
+          additionalProperties:
+            type: string
+        time:
+          type: string
+          format: date-time
+          description: Time of the annotated event
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+    AnnotationRequest:
+      type: object
+      required:
+      - name
+      - projectId
+      properties:
+        projectId:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        attrs:
+          type: object
+          additionalProperties:
+            type: string
+        time:
+          type: string
+          format: date-time
+    AnnotationList:
+      type: object
+      properties:
+        annotations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Annotation'
+        count:
+          type: integer
+  securitySchemes:
+    DSNAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'DSN-based token: ''Bearer <project_secret_token>'''
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Uptrace API token

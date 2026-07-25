@@ -1,0 +1,208 @@
+openapi: 3.0.3
+info:
+  title: Uptrace Alerts Projects API
+  description: Uptrace is an open source APM (Application Performance Monitoring) and distributed tracing platform powered by OpenTelemetry. The Uptrace REST API provides programmatic access to annotations, Prometheus metrics ingestion, alerting rules, and telemetry data including traces, metrics, and logs. Uptrace accepts telemetry data via OTLP/gRPC and OTLP/HTTP protocols in addition to Prometheus Remote Write.
+  version: v1
+  contact:
+    name: Uptrace Support
+    url: https://uptrace.dev
+  license:
+    name: BSL 1.1
+    url: https://github.com/uptrace/uptrace/blob/master/LICENSE
+servers:
+- url: https://api.uptrace.dev
+  description: Uptrace Cloud API
+- url: http://localhost:14318
+  description: Uptrace Self-Hosted (HTTP port)
+security:
+- BearerAuth: []
+tags:
+- name: Projects
+  description: Project and DSN management
+paths:
+  /api/v1/projects:
+    get:
+      operationId: listProjects
+      summary: List Projects
+      description: Retrieve all projects in the Uptrace account.
+      tags:
+      - Projects
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createProject
+      summary: Create Project
+      description: Create a new Uptrace project.
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+      responses:
+        '200':
+          description: Project created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/projects/{projectId}:
+    get:
+      operationId: getProject
+      summary: Get Project
+      description: Retrieve details of a specific project including its DSN.
+      tags:
+      - Projects
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateProject
+      summary: Update Project
+      description: Update project settings.
+      tags:
+      - Projects
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+      responses:
+        '200':
+          description: Project updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteProject
+      summary: Delete Project
+      description: Delete a project and all its data.
+      tags:
+      - Projects
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Project deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    ProjectRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+    ProjectList:
+      type: object
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        count:
+          type: integer
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        dsn:
+          type: string
+          description: 'Data Source Name used to configure OpenTelemetry exporters, format: http://secret_token@host:port?grpc=grpc_port'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    DSNAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'DSN-based token: ''Bearer <project_secret_token>'''
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Uptrace API token

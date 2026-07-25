@@ -1,0 +1,269 @@
+openapi: 3.0.3
+info:
+  title: Uptrace Alerts API
+  description: Uptrace is an open source APM (Application Performance Monitoring) and distributed tracing platform powered by OpenTelemetry. The Uptrace REST API provides programmatic access to annotations, Prometheus metrics ingestion, alerting rules, and telemetry data including traces, metrics, and logs. Uptrace accepts telemetry data via OTLP/gRPC and OTLP/HTTP protocols in addition to Prometheus Remote Write.
+  version: v1
+  contact:
+    name: Uptrace Support
+    url: https://uptrace.dev
+  license:
+    name: BSL 1.1
+    url: https://github.com/uptrace/uptrace/blob/master/LICENSE
+servers:
+- url: https://api.uptrace.dev
+  description: Uptrace Cloud API
+- url: http://localhost:14318
+  description: Uptrace Self-Hosted (HTTP port)
+security:
+- BearerAuth: []
+tags:
+- name: Alerts
+  description: Alert rule management and notifications
+paths:
+  /api/v1/alerts:
+    get:
+      operationId: listAlerts
+      summary: List Alerts
+      description: Retrieve a list of alert rules for a project.
+      tags:
+      - Alerts
+      parameters:
+      - name: projectId
+        in: query
+        required: true
+        schema:
+          type: integer
+        description: Project identifier
+      - name: state
+        in: query
+        schema:
+          type: string
+          enum:
+          - active
+          - resolved
+          - all
+        description: Filter by alert state
+      responses:
+        '200':
+          description: List of alerts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createAlert
+      summary: Create Alert
+      description: Create a new alert rule for monitoring metrics or error rates.
+      tags:
+      - Alerts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRequest'
+      responses:
+        '200':
+          description: Alert rule created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/alerts/{alertId}:
+    get:
+      operationId: getAlert
+      summary: Get Alert
+      description: Retrieve details of a specific alert rule.
+      tags:
+      - Alerts
+      parameters:
+      - name: alertId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Alert details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateAlert
+      summary: Update Alert
+      description: Update an existing alert rule.
+      tags:
+      - Alerts
+      parameters:
+      - name: alertId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRequest'
+      responses:
+        '200':
+          description: Alert updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteAlert
+      summary: Delete Alert
+      description: Delete an alert rule.
+      tags:
+      - Alerts
+      parameters:
+      - name: alertId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Alert deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    AlertList:
+      type: object
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alert'
+        count:
+          type: integer
+    AlertRequest:
+      type: object
+      required:
+      - name
+      - projectId
+      - query
+      properties:
+        projectId:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - metric
+          - error-rate
+          - span-count
+        query:
+          type: string
+        forDuration:
+          type: string
+        condition:
+          type: string
+        notificationChannels:
+          type: array
+          items:
+            type: string
+    Alert:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - metric
+          - error-rate
+          - span-count
+        state:
+          type: string
+          enum:
+          - active
+          - resolved
+          - muted
+        query:
+          type: string
+          description: PromQL or Uptrace query expression
+        forDuration:
+          type: string
+          description: Duration condition (e.g., 5m)
+        condition:
+          type: string
+          description: Comparison expression (e.g., "> 0")
+        notificationChannels:
+          type: array
+          items:
+            type: string
+            enum:
+            - email
+            - slack
+            - webhook
+            - alertmanager
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+  securitySchemes:
+    DSNAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'DSN-based token: ''Bearer <project_secret_token>'''
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Uptrace API token

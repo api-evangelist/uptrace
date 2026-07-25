@@ -1,0 +1,140 @@
+openapi: 3.0.3
+info:
+  title: Uptrace Alerts Dashboards API
+  description: Uptrace is an open source APM (Application Performance Monitoring) and distributed tracing platform powered by OpenTelemetry. The Uptrace REST API provides programmatic access to annotations, Prometheus metrics ingestion, alerting rules, and telemetry data including traces, metrics, and logs. Uptrace accepts telemetry data via OTLP/gRPC and OTLP/HTTP protocols in addition to Prometheus Remote Write.
+  version: v1
+  contact:
+    name: Uptrace Support
+    url: https://uptrace.dev
+  license:
+    name: BSL 1.1
+    url: https://github.com/uptrace/uptrace/blob/master/LICENSE
+servers:
+- url: https://api.uptrace.dev
+  description: Uptrace Cloud API
+- url: http://localhost:14318
+  description: Uptrace Self-Hosted (HTTP port)
+security:
+- BearerAuth: []
+tags:
+- name: Dashboards
+  description: Dashboard management
+paths:
+  /api/v1/dashboards:
+    get:
+      operationId: listDashboards
+      summary: List Dashboards
+      description: Retrieve all dashboards for a project.
+      tags:
+      - Dashboards
+      parameters:
+      - name: projectId
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of dashboards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createDashboard
+      summary: Create Dashboard
+      description: Create a new dashboard with panels and queries.
+      tags:
+      - Dashboards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardRequest'
+      responses:
+        '200':
+          description: Dashboard created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    DashboardRequest:
+      type: object
+      required:
+      - name
+      - projectId
+      properties:
+        projectId:
+          type: integer
+        name:
+          type: string
+        panels:
+          type: array
+          items:
+            type: object
+    Dashboard:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        panels:
+          type: array
+          items:
+            type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+    DashboardList:
+      type: object
+      properties:
+        dashboards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dashboard'
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    DSNAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'DSN-based token: ''Bearer <project_secret_token>'''
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Uptrace API token
