@@ -5,7 +5,20 @@ description: >-
   traces, metrics, and logs. The Uptrace API provides programmatic access to annotations, Prometheus metrics ingestion,
   PromQL querying, alert rules, project management, and dashboards.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/uptrace.png
 tags:
   - APM
   - Observability
@@ -17,27 +30,76 @@ created: '2026-03-25'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 apis:
-  - aid: uptrace:uptrace
-    name: Uptrace API
-    description: >-
-      The Uptrace REST API provides programmatic management of projects, chart annotations for deployment tracking,
-      alert rules using PromQL, dashboard management, and Prometheus Remote Write for metrics ingestion. Uptrace accepts
-      OpenTelemetry data via OTLP/gRPC and OTLP/HTTP.
-    humanURL: https://uptrace.dev
-    baseURL: https://api.uptrace.dev
-    tags:
-      - APM
-      - Observability
-      - OpenTelemetry
-      - Distributed Tracing
-      - Alerting
-    properties:
-      - type: Documentation
-        url: https://uptrace.dev/get/get-started.html
-      - type: GitHubRepository
-        url: https://github.com/uptrace/uptrace
-      - type: OpenAPI
-        url: https://raw.githubusercontent.com/api-evangelist/uptrace/refs/heads/main/openapi/uptrace-openapi.yml
+- aid: uptrace:uptrace-alerts-api
+  name: Uptrace Alerts API
+  description: Alert rule management and notifications
+  humanURL: https://uptrace.dev
+  baseURL: https://api.uptrace.dev
+  tags:
+  - Alerts
+  properties:
+  - type: OpenAPI
+    url: openapi/uptrace-alerts-api-openapi.yml
+  - type: Documentation
+    url: https://uptrace.dev/get/get-started.html
+  - type: GitHubRepository
+    url: https://github.com/uptrace/uptrace
+- aid: uptrace:uptrace-annotations-api
+  name: Uptrace Annotations API
+  description: Chart annotation management
+  humanURL: https://uptrace.dev
+  baseURL: https://api.uptrace.dev
+  tags:
+  - Annotations
+  properties:
+  - type: OpenAPI
+    url: openapi/uptrace-annotations-api-openapi.yml
+  - type: Documentation
+    url: https://uptrace.dev/get/get-started.html
+  - type: GitHubRepository
+    url: https://github.com/uptrace/uptrace
+- aid: uptrace:uptrace-dashboards-api
+  name: Uptrace Dashboards API
+  description: Dashboard management
+  humanURL: https://uptrace.dev
+  baseURL: https://api.uptrace.dev
+  tags:
+  - Dashboards
+  properties:
+  - type: OpenAPI
+    url: openapi/uptrace-dashboards-api-openapi.yml
+  - type: Documentation
+    url: https://uptrace.dev/get/get-started.html
+  - type: GitHubRepository
+    url: https://github.com/uptrace/uptrace
+- aid: uptrace:uptrace-metrics-api
+  name: Uptrace Metrics API
+  description: Prometheus metrics ingestion and querying
+  humanURL: https://uptrace.dev
+  baseURL: https://api.uptrace.dev
+  tags:
+  - Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/uptrace-metrics-api-openapi.yml
+  - type: Documentation
+    url: https://uptrace.dev/get/get-started.html
+  - type: GitHubRepository
+    url: https://github.com/uptrace/uptrace
+- aid: uptrace:uptrace-projects-api
+  name: Uptrace Projects API
+  description: Project and DSN management
+  humanURL: https://uptrace.dev
+  baseURL: https://api.uptrace.dev
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/uptrace-projects-api-openapi.yml
+  - type: Documentation
+    url: https://uptrace.dev/get/get-started.html
+  - type: GitHubRepository
+    url: https://github.com/uptrace/uptrace
 common:
   - type: AgenticAccess
     url: agentic-access/uptrace-agentic-access.yml
