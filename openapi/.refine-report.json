@@ -1,0 +1,22 @@
+{
+  "provider": "uptrace",
+  "sources": [
+    "uptrace-alerts-api-openapi.yml",
+    "uptrace-annotations-api-openapi.yml",
+    "uptrace-dashboards-api-openapi.yml",
+    "uptrace-metrics-api-openapi.yml",
+    "uptrace-projects-api-openapi.yml"
+  ],
+  "outputs": [
+    "uptrace-alerts-api-openapi.yml",
+    "uptrace-annotations-api-openapi.yml",
+    "uptrace-dashboards-api-openapi.yml",
+    "uptrace-metrics-api-openapi.yml",
+    "uptrace-projects-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

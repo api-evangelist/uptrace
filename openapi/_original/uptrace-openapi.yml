@@ -1,0 +1,851 @@
+openapi: 3.0.3
+info:
+  title: Uptrace API
+  description: >-
+    Uptrace is an open source APM (Application Performance Monitoring) and
+    distributed tracing platform powered by OpenTelemetry. The Uptrace REST API
+    provides programmatic access to annotations, Prometheus metrics ingestion,
+    alerting rules, and telemetry data including traces, metrics, and logs.
+    Uptrace accepts telemetry data via OTLP/gRPC and OTLP/HTTP protocols in
+    addition to Prometheus Remote Write.
+  version: 'v1'
+  contact:
+    name: Uptrace Support
+    url: https://uptrace.dev
+  license:
+    name: BSL 1.1
+    url: https://github.com/uptrace/uptrace/blob/master/LICENSE
+servers:
+  - url: https://api.uptrace.dev
+    description: Uptrace Cloud API
+  - url: http://localhost:14318
+    description: Uptrace Self-Hosted (HTTP port)
+
+tags:
+  - name: Annotations
+    description: Chart annotation management
+  - name: Metrics
+    description: Prometheus metrics ingestion and querying
+  - name: Spans
+    description: Distributed trace span querying
+  - name: Alerts
+    description: Alert rule management and notifications
+  - name: Projects
+    description: Project and DSN management
+  - name: Dashboards
+    description: Dashboard management
+
+paths:
+  /api/v1/annotations:
+    get:
+      operationId: listAnnotations
+      summary: List Annotations
+      description: Retrieve chart annotations for a project within a time range.
+      tags:
+        - Annotations
+      parameters:
+        - name: projectId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Project identifier
+        - name: startTime
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Start of time range (ISO 8601)
+        - name: endTime
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: End of time range (ISO 8601)
+        - name: tags
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by annotation tags
+      responses:
+        '200':
+          description: List of annotations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnotationList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      operationId: createAnnotation
+      summary: Create Annotation
+      description: >-
+        Create a chart annotation to mark a deployment, incident, or other
+        significant event on Uptrace dashboards.
+      tags:
+        - Annotations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnotationRequest'
+      responses:
+        '200':
+          description: Annotation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/annotations/{annotationId}:
+    get:
+      operationId: getAnnotation
+      summary: Get Annotation
+      description: Retrieve a specific annotation by ID.
+      tags:
+        - Annotations
+      parameters:
+        - name: annotationId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Annotation identifier
+      responses:
+        '200':
+          description: Annotation details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      operationId: updateAnnotation
+      summary: Update Annotation
+      description: Update an existing annotation.
+      tags:
+        - Annotations
+      parameters:
+        - name: annotationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnotationRequest'
+      responses:
+        '200':
+          description: Annotation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      operationId: deleteAnnotation
+      summary: Delete Annotation
+      description: Delete a chart annotation.
+      tags:
+        - Annotations
+      parameters:
+        - name: annotationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Annotation deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/prometheus/write:
+    post:
+      operationId: prometheusRemoteWrite
+      summary: Prometheus Remote Write
+      description: >-
+        Ingest Prometheus metrics into Uptrace using the Prometheus Remote Write
+        protocol (protobuf-encoded snappy-compressed timeseries data).
+      tags:
+        - Metrics
+      requestBody:
+        required: true
+        content:
+          application/x-protobuf:
+            schema:
+              type: string
+              format: binary
+              description: Prometheus WriteRequest protobuf (snappy compressed)
+      responses:
+        '204':
+          description: Metrics ingested successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/prometheus/{projectId}:
+    get:
+      operationId: prometheusQueryRange
+      summary: Prometheus Query Range
+      description: >-
+        Query Uptrace metrics using PromQL over a time range. Compatible with
+        Grafana's Prometheus data source and standard Prometheus HTTP API.
+      tags:
+        - Metrics
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: "Uptrace project ID or 'default'"
+        - name: query
+          in: query
+          schema:
+            type: string
+          description: PromQL query expression
+        - name: start
+          in: query
+          schema:
+            type: string
+          description: Start timestamp (Unix or RFC3339)
+        - name: end
+          in: query
+          schema:
+            type: string
+          description: End timestamp (Unix or RFC3339)
+        - name: step
+          in: query
+          schema:
+            type: string
+          description: Query resolution step (e.g., 15s, 1m)
+      responses:
+        '200':
+          description: PromQL query result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusQueryResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/alerts:
+    get:
+      operationId: listAlerts
+      summary: List Alerts
+      description: Retrieve a list of alert rules for a project.
+      tags:
+        - Alerts
+      parameters:
+        - name: projectId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Project identifier
+        - name: state
+          in: query
+          schema:
+            type: string
+            enum: [active, resolved, all]
+          description: Filter by alert state
+      responses:
+        '200':
+          description: List of alerts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      operationId: createAlert
+      summary: Create Alert
+      description: Create a new alert rule for monitoring metrics or error rates.
+      tags:
+        - Alerts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRequest'
+      responses:
+        '200':
+          description: Alert rule created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/alerts/{alertId}:
+    get:
+      operationId: getAlert
+      summary: Get Alert
+      description: Retrieve details of a specific alert rule.
+      tags:
+        - Alerts
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Alert details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      operationId: updateAlert
+      summary: Update Alert
+      description: Update an existing alert rule.
+      tags:
+        - Alerts
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRequest'
+      responses:
+        '200':
+          description: Alert updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      operationId: deleteAlert
+      summary: Delete Alert
+      description: Delete an alert rule.
+      tags:
+        - Alerts
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Alert deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/projects:
+    get:
+      operationId: listProjects
+      summary: List Projects
+      description: Retrieve all projects in the Uptrace account.
+      tags:
+        - Projects
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      operationId: createProject
+      summary: Create Project
+      description: Create a new Uptrace project.
+      tags:
+        - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+      responses:
+        '200':
+          description: Project created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/projects/{projectId}:
+    get:
+      operationId: getProject
+      summary: Get Project
+      description: Retrieve details of a specific project including its DSN.
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      operationId: updateProject
+      summary: Update Project
+      description: Update project settings.
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+      responses:
+        '200':
+          description: Project updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      operationId: deleteProject
+      summary: Delete Project
+      description: Delete a project and all its data.
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Project deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/dashboards:
+    get:
+      operationId: listDashboards
+      summary: List Dashboards
+      description: Retrieve all dashboards for a project.
+      tags:
+        - Dashboards
+      parameters:
+        - name: projectId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of dashboards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      operationId: createDashboard
+      summary: Create Dashboard
+      description: Create a new dashboard with panels and queries.
+      tags:
+        - Dashboards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardRequest'
+      responses:
+        '200':
+          description: Dashboard created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    DSNAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: "DSN-based token: 'Bearer <project_secret_token>'"
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Uptrace API token
+
+  responses:
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+
+    Annotation:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+          description: Annotation label/title
+        description:
+          type: string
+          description: Markdown-formatted description
+        tags:
+          type: array
+          items:
+            type: string
+          description: Classification tags
+        attrs:
+          type: object
+          description: Custom key-value attributes
+          additionalProperties:
+            type: string
+        time:
+          type: string
+          format: date-time
+          description: Time of the annotated event
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    AnnotationList:
+      type: object
+      properties:
+        annotations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Annotation'
+        count:
+          type: integer
+
+    AnnotationRequest:
+      type: object
+      required:
+        - name
+        - projectId
+      properties:
+        projectId:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        attrs:
+          type: object
+          additionalProperties:
+            type: string
+        time:
+          type: string
+          format: date-time
+
+    PrometheusQueryResult:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+        data:
+          type: object
+          properties:
+            resultType:
+              type: string
+              enum: [matrix, vector, scalar, string]
+            result:
+              type: array
+              items:
+                type: object
+                properties:
+                  metric:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  values:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        oneOf:
+                          - type: number
+                          - type: string
+
+    Alert:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [metric, error-rate, span-count]
+        state:
+          type: string
+          enum: [active, resolved, muted]
+        query:
+          type: string
+          description: PromQL or Uptrace query expression
+        forDuration:
+          type: string
+          description: Duration condition (e.g., 5m)
+        condition:
+          type: string
+          description: Comparison expression (e.g., "> 0")
+        notificationChannels:
+          type: array
+          items:
+            type: string
+            enum: [email, slack, webhook, alertmanager]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    AlertList:
+      type: object
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alert'
+        count:
+          type: integer
+
+    AlertRequest:
+      type: object
+      required:
+        - name
+        - projectId
+        - query
+      properties:
+        projectId:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [metric, error-rate, span-count]
+        query:
+          type: string
+        forDuration:
+          type: string
+        condition:
+          type: string
+        notificationChannels:
+          type: array
+          items:
+            type: string
+
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        dsn:
+          type: string
+          description: >-
+            Data Source Name used to configure OpenTelemetry exporters,
+            format: http://secret_token@host:port?grpc=grpc_port
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProjectList:
+      type: object
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        count:
+          type: integer
+
+    ProjectRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+
+    Dashboard:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        panels:
+          type: array
+          items:
+            type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    DashboardList:
+      type: object
+      properties:
+        dashboards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dashboard'
+
+    DashboardRequest:
+      type: object
+      required:
+        - name
+        - projectId
+      properties:
+        projectId:
+          type: integer
+        name:
+          type: string
+        panels:
+          type: array
+          items:
+            type: object
+
+security:
+  - BearerAuth: []
