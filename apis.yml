@@ -101,6 +101,9 @@ apis:
   - type: GitHubRepository
     url: https://github.com/uptrace/uptrace
 common:
+  - type: License
+    name: AGPL-3.0
+    url: https://github.com/uptrace/uptrace/blob/master/LICENSE
   - type: AgenticAccess
     url: agentic-access/uptrace-agentic-access.yml
   - type: DomainSecurity
