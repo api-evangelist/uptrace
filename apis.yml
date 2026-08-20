@@ -92,6 +92,8 @@ apis:
   humanURL: https://uptrace.dev
   baseURL: https://api.uptrace.dev
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
