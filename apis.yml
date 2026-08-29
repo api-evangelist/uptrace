@@ -5,6 +5,19 @@ description: >-
   traces, metrics, and logs. The Uptrace API provides programmatic access to annotations, Prometheus metrics ingestion,
   PromQL querying, alert rules, project management, and dashboards.
 type: Index
+deliveryModel:
+  model: self-hosted
+  license: AGPL-3.0
+  open_source: true
+  commercial: false
+  callable_host: true
+  label: Self-hosted open source · you run it yourself
+  confidence: high
+  source:
+  - license
+  - openapi
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
@@ -103,6 +116,12 @@ apis:
   - type: GitHubRepository
     url: https://github.com/uptrace/uptrace
 common:
+  - type: IssueTracker
+    url: https://github.com/uptrace/uptrace/issues
+  - type: Releases
+    url: https://github.com/uptrace/uptrace/releases
+  - type: ContributionGuide
+    url: https://github.com/uptrace/uptrace/blob/master/CONTRIBUTING.md
   - type: License
     name: AGPL-3.0
     url: https://github.com/uptrace/uptrace/blob/master/LICENSE
