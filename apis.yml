@@ -64,6 +64,8 @@ apis:
   humanURL: https://uptrace.dev
   baseURL: https://api.uptrace.dev
   tags:
+  - Annotation
+  tags_raw:
   - Annotations
   properties:
   - type: OpenAPI
