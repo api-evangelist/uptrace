@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Uptrace Alerts Dashboards API
+  title: Uptrace Dashboards API
   description: Uptrace is an open source APM (Application Performance Monitoring) and distributed tracing platform powered by OpenTelemetry. The Uptrace REST API provides programmatic access to annotations, Prometheus metrics ingestion, alerting rules, and telemetry data including traces, metrics, and logs. Uptrace accepts telemetry data via OTLP/gRPC and OTLP/HTTP protocols in addition to Prometheus Remote Write.
   version: v1
   contact:
@@ -102,12 +102,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
     DashboardList:
       type: object
       properties:
@@ -115,15 +109,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dashboard'
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
   responses:
-    BadRequest:
-      description: Invalid request
+    Unauthorized:
+      description: API token missing or invalid
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: API token missing or invalid
+    BadRequest:
+      description: Invalid request
       content:
         application/json:
           schema:

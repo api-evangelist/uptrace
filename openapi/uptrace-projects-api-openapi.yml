@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Uptrace Alerts Projects API
+  title: Uptrace Projects API
   description: Uptrace is an open source APM (Application Performance Monitoring) and distributed tracing platform powered by OpenTelemetry. The Uptrace REST API provides programmatic access to annotations, Prometheus metrics ingestion, alerting rules, and telemetry data including traces, metrics, and logs. Uptrace accepts telemetry data via OTLP/gRPC and OTLP/HTTP protocols in addition to Prometheus Remote Write.
   version: v1
   contact:
@@ -134,6 +134,25 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     ProjectRequest:
       type: object
@@ -144,15 +163,6 @@ components:
           type: string
         slug:
           type: string
-    ProjectList:
-      type: object
-      properties:
-        projects:
-          type: array
-          items:
-            $ref: '#/components/schemas/Project'
-        count:
-          type: integer
     Project:
       type: object
       properties:
@@ -171,31 +181,21 @@ components:
         updatedAt:
           type: string
           format: date-time
+    ProjectList:
+      type: object
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        count:
+          type: integer
     Error:
       type: object
       properties:
         message:
           type: string
           description: Error message
-  responses:
-    BadRequest:
-      description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: API token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     DSNAuth:
       type: apiKey

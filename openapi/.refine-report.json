@@ -1,11 +1,7 @@
 {
   "provider": "uptrace",
   "sources": [
-    "uptrace-alerts-api-openapi.yml",
-    "uptrace-annotations-api-openapi.yml",
-    "uptrace-dashboards-api-openapi.yml",
-    "uptrace-metrics-api-openapi.yml",
-    "uptrace-projects-api-openapi.yml"
+    "_original/uptrace-openapi.yml"
   ],
   "outputs": [
     "uptrace-alerts-api-openapi.yml",
@@ -17,6 +13,16 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "uptrace-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "uptrace-alerts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uptrace-annotations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uptrace-dashboards-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uptrace-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uptrace-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

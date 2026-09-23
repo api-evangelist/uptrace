@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Uptrace Alerts Annotations API
+  title: Uptrace Annotations API
   description: Uptrace is an open source APM (Application Performance Monitoring) and distributed tracing platform powered by OpenTelemetry. The Uptrace REST API provides programmatic access to annotations, Prometheus metrics ingestion, alerting rules, and telemetry data including traces, metrics, and logs. Uptrace accepts telemetry data via OTLP/gRPC and OTLP/HTTP protocols in addition to Prometheus Remote Write.
   version: v1
   contact:
@@ -161,26 +161,22 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    BadRequest:
-      description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: API token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+    AnnotationList:
+      type: object
+      properties:
+        annotations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Annotation'
+        count:
+          type: integer
     Annotation:
       type: object
       properties:
@@ -214,12 +210,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
     AnnotationRequest:
       type: object
       required:
@@ -243,15 +233,25 @@ components:
         time:
           type: string
           format: date-time
-    AnnotationList:
-      type: object
-      properties:
-        annotations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Annotation'
-        count:
-          type: integer
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     DSNAuth:
       type: apiKey
