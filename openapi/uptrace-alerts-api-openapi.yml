@@ -150,26 +150,13 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: API token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
     AlertList:
       type: object
       properties:
@@ -179,33 +166,6 @@ components:
             $ref: '#/components/schemas/Alert'
         count:
           type: integer
-    AlertRequest:
-      type: object
-      required:
-      - name
-      - projectId
-      - query
-      properties:
-        projectId:
-          type: integer
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - metric
-          - error-rate
-          - span-count
-        query:
-          type: string
-        forDuration:
-          type: string
-        condition:
-          type: string
-        notificationChannels:
-          type: array
-          items:
-            type: string
     Alert:
       type: object
       properties:
@@ -251,12 +211,52 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Error:
+    AlertRequest:
       type: object
+      required:
+      - name
+      - projectId
+      - query
       properties:
-        message:
+        projectId:
+          type: integer
+        name:
           type: string
-          description: Error message
+        type:
+          type: string
+          enum:
+          - metric
+          - error-rate
+          - span-count
+        query:
+          type: string
+        forDuration:
+          type: string
+        condition:
+          type: string
+        notificationChannels:
+          type: array
+          items:
+            type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     DSNAuth:
       type: apiKey

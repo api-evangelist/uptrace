@@ -134,6 +134,49 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+    ProjectRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+    ProjectList:
+      type: object
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        count:
+          type: integer
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        dsn:
+          type: string
+          description: 'Data Source Name used to configure OpenTelemetry exporters, format: http://secret_token@host:port?grpc=grpc_port'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
   responses:
     NotFound:
       description: Resource not found
@@ -153,49 +196,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  schemas:
-    ProjectRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        slug:
-          type: string
-    Project:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        slug:
-          type: string
-        dsn:
-          type: string
-          description: 'Data Source Name used to configure OpenTelemetry exporters, format: http://secret_token@host:port?grpc=grpc_port'
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    ProjectList:
-      type: object
-      properties:
-        projects:
-          type: array
-          items:
-            $ref: '#/components/schemas/Project'
-        count:
-          type: integer
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
   securitySchemes:
     DSNAuth:
       type: apiKey

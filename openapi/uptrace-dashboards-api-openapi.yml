@@ -67,20 +67,19 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    DashboardRequest:
+    Error:
       type: object
-      required:
-      - name
-      - projectId
       properties:
-        projectId:
-          type: integer
-        name:
+        message:
           type: string
-        panels:
+          description: Error message
+    DashboardList:
+      type: object
+      properties:
+        dashboards:
           type: array
           items:
-            type: object
+            $ref: '#/components/schemas/Dashboard'
     Dashboard:
       type: object
       properties:
@@ -102,19 +101,20 @@ components:
         updatedAt:
           type: string
           format: date-time
-    DashboardList:
+    DashboardRequest:
       type: object
+      required:
+      - name
+      - projectId
       properties:
-        dashboards:
+        projectId:
+          type: integer
+        name:
+          type: string
+        panels:
           type: array
           items:
-            $ref: '#/components/schemas/Dashboard'
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
+            type: object
   responses:
     Unauthorized:
       description: API token missing or invalid

@@ -168,15 +168,6 @@ components:
         message:
           type: string
           description: Error message
-    AnnotationList:
-      type: object
-      properties:
-        annotations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Annotation'
-        count:
-          type: integer
     Annotation:
       type: object
       properties:
@@ -210,6 +201,15 @@ components:
         updatedAt:
           type: string
           format: date-time
+    AnnotationList:
+      type: object
+      properties:
+        annotations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Annotation'
+        count:
+          type: integer
     AnnotationRequest:
       type: object
       required:
