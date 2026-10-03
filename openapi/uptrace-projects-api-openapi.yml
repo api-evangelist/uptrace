@@ -141,24 +141,6 @@ components:
         message:
           type: string
           description: Error message
-    ProjectRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        slug:
-          type: string
-    ProjectList:
-      type: object
-      properties:
-        projects:
-          type: array
-          items:
-            $ref: '#/components/schemas/Project'
-        count:
-          type: integer
     Project:
       type: object
       properties:
@@ -177,6 +159,24 @@ components:
         updatedAt:
           type: string
           format: date-time
+    ProjectRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+    ProjectList:
+      type: object
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        count:
+          type: integer
   responses:
     NotFound:
       description: Resource not found

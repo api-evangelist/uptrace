@@ -168,6 +168,38 @@ components:
         message:
           type: string
           description: Error message
+    AnnotationRequest:
+      type: object
+      required:
+      - name
+      - projectId
+      properties:
+        projectId:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        attrs:
+          type: object
+          additionalProperties:
+            type: string
+        time:
+          type: string
+          format: date-time
+    AnnotationList:
+      type: object
+      properties:
+        annotations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Annotation'
+        count:
+          type: integer
     Annotation:
       type: object
       properties:
@@ -201,38 +233,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    AnnotationList:
-      type: object
-      properties:
-        annotations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Annotation'
-        count:
-          type: integer
-    AnnotationRequest:
-      type: object
-      required:
-      - name
-      - projectId
-      properties:
-        projectId:
-          type: integer
-        name:
-          type: string
-        description:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-        attrs:
-          type: object
-          additionalProperties:
-            type: string
-        time:
-          type: string
-          format: date-time
   responses:
     NotFound:
       description: Resource not found
@@ -240,14 +240,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: API token missing or invalid
+    BadRequest:
+      description: Invalid request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request
+    Unauthorized:
+      description: API token missing or invalid
       content:
         application/json:
           schema:
