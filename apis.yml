@@ -119,6 +119,9 @@ apis:
   - type: GitHubRepository
     url: https://github.com/uptrace/uptrace
 common:
+  - type: CapabilityMap
+    url: capabilities/uptrace-capability-edges.yml
+    name: Uptrace Business Capability Map
   - type: IssueTracker
     url: https://github.com/uptrace/uptrace/issues
   - type: Releases
