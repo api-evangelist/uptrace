@@ -135,12 +135,24 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Error:
+    ProjectList:
       type: object
       properties:
-        message:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        count:
+          type: integer
+    ProjectRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
           type: string
-          description: Error message
+        slug:
+          type: string
     Project:
       type: object
       properties:
@@ -159,24 +171,12 @@ components:
         updatedAt:
           type: string
           format: date-time
-    ProjectRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        slug:
-          type: string
-    ProjectList:
+    Error:
       type: object
       properties:
-        projects:
-          type: array
-          items:
-            $ref: '#/components/schemas/Project'
-        count:
-          type: integer
+        message:
+          type: string
+          description: Error message
   responses:
     NotFound:
       description: Resource not found

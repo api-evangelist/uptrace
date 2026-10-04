@@ -151,39 +151,15 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Error:
+    AlertList:
       type: object
       properties:
-        message:
-          type: string
-          description: Error message
-    AlertRequest:
-      type: object
-      required:
-      - name
-      - projectId
-      - query
-      properties:
-        projectId:
-          type: integer
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - metric
-          - error-rate
-          - span-count
-        query:
-          type: string
-        forDuration:
-          type: string
-        condition:
-          type: string
-        notificationChannels:
+        alerts:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Alert'
+        count:
+          type: integer
     Alert:
       type: object
       properties:
@@ -229,15 +205,39 @@ components:
         updatedAt:
           type: string
           format: date-time
-    AlertList:
+    AlertRequest:
       type: object
+      required:
+      - name
+      - projectId
+      - query
       properties:
-        alerts:
+        projectId:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - metric
+          - error-rate
+          - span-count
+        query:
+          type: string
+        forDuration:
+          type: string
+        condition:
+          type: string
+        notificationChannels:
           type: array
           items:
-            $ref: '#/components/schemas/Alert'
-        count:
-          type: integer
+            type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
   responses:
     NotFound:
       description: Resource not found
@@ -245,14 +245,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request
+    Unauthorized:
+      description: API token missing or invalid
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: API token missing or invalid
+    BadRequest:
+      description: Invalid request
       content:
         application/json:
           schema:

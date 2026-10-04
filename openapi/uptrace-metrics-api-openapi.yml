@@ -102,12 +102,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
     PrometheusQueryResult:
       type: object
       properties:
@@ -143,6 +137,12 @@ components:
                         oneOf:
                         - type: number
                         - type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
   securitySchemes:
     DSNAuth:
       type: apiKey

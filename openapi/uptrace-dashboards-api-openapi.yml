@@ -67,12 +67,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
     Dashboard:
       type: object
       properties:
@@ -94,13 +88,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    DashboardList:
-      type: object
-      properties:
-        dashboards:
-          type: array
-          items:
-            $ref: '#/components/schemas/Dashboard'
     DashboardRequest:
       type: object
       required:
@@ -115,6 +102,19 @@ components:
           type: array
           items:
             type: object
+    DashboardList:
+      type: object
+      properties:
+        dashboards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dashboard'
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
   responses:
     Unauthorized:
       description: API token missing or invalid
