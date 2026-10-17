@@ -134,6 +134,25 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     ProjectList:
       type: object
@@ -144,15 +163,12 @@ components:
             $ref: '#/components/schemas/Project'
         count:
           type: integer
-    ProjectRequest:
+    Error:
       type: object
-      required:
-      - name
       properties:
-        name:
+        message:
           type: string
-        slug:
-          type: string
+          description: Error message
     Project:
       type: object
       properties:
@@ -171,31 +187,15 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Error:
+    ProjectRequest:
       type: object
+      required:
+      - name
       properties:
-        message:
+        name:
           type: string
-          description: Error message
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: API token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+        slug:
+          type: string
   securitySchemes:
     DSNAuth:
       type: apiKey

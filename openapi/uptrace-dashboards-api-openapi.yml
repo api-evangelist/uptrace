@@ -66,28 +66,20 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    Unauthorized:
+      description: API token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Dashboard:
-      type: object
-      properties:
-        id:
-          type: integer
-        projectId:
-          type: integer
-        name:
-          type: string
-        slug:
-          type: string
-        panels:
-          type: array
-          items:
-            type: object
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
     DashboardRequest:
       type: object
       required:
@@ -115,19 +107,27 @@ components:
         message:
           type: string
           description: Error message
-  responses:
-    Unauthorized:
-      description: API token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Dashboard:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        panels:
+          type: array
+          items:
+            type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
   securitySchemes:
     DSNAuth:
       type: apiKey
