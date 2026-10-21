@@ -27,3 +27,16 @@
     detected: '2026-10-13'
   status: not-a-workflow
   arazzo: null
+- slug: uptrace-terraform-terraform-registry
+  label: Terraform (terraform-registry)
+  partner: terraform
+  partner_name: Terraform (terraform-registry)
+  category: infrastructure-as-code provider registry listing
+  type: marketplace
+  marketplace: terraform-registry
+  channel: partner-built
+  evidence: https://registry.terraform.io/providers/uptrace/uptrace
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
